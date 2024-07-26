@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using BikeSharingApp.Utils
+@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -28,11 +30,41 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="User"
                                 asp-action="ListUsers">Users</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Bikes"
+                                asp-action="ListBikes">Bikes</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (Context.Session.Get<User>("User") != null)
+                        {
+                            var user = Context.Session.Get<User>("User");
+                            var emailName = user.Email.Split('@')[0];
+                            <li class="nav-item d-flex align-items-center">
+                                <span class="navbar-text me-2">Welcome, @user.FullName</span>
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="nav-link mb-0">
+                                    <button type="submit" class="btn btn-link">Logout</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account"
+                                    asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account"
+                                    asp-action="Register">Register</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

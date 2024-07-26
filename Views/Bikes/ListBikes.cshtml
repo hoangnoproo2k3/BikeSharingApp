@@ -1,0 +1,21 @@
+@model IEnumerable<BikeSharingApp.Models.Bike>
+
+<div class="container">
+    <div class="row">
+        @foreach (var bike in Model)
+        {
+            <div class="col-md-4 col-sm-12 mb-4">
+                <div class="card">
+                    <img src="@bike.Img" class="card-img-top" alt="@bike.BikeName">
+                    <div class="card-body">
+                        <h5 class="card-title">@bike.BikeName</h5>
+                        <p class="card-text">Price: $@bike.Price</p>
+                        <p class="card-text">Status: @bike.BikeStatus</p>
+                        <p class="card-text">Location: @bike.Location?.Name</p>
+                        @* <p class="card-text">VerifyKey: @bike.VerifyKey</p> *@
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

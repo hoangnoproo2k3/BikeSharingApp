@@ -20,5 +20,10 @@ namespace BikeSharingApp.Models
         public User Owner { get; set; }
         public Location Location { get; set; }
         public ICollection<Booking> Bookings { get; set; }
+
+        // [Required]
+        // [StringLength(10, MinimumLength = 10)]
+        // [RegularExpression(@"^\d.*$", ErrorMessage = "VerifyKey must start with a digit and be exactly 10 characters long.")]
+        // public string VerifyKey { get; set; }
     }
 }

@@ -76,7 +76,7 @@ namespace BikeSharingApp.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Bikes");
+                    b.ToTable("Bikes", (string)null);
                 });
 
             modelBuilder.Entity("BikeSharingApp.Models.Booking", b =>
@@ -116,7 +116,7 @@ namespace BikeSharingApp.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("BikeSharingApp.Models.Location", b =>
@@ -141,7 +141,7 @@ namespace BikeSharingApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("BikeSharingApp.Models.Review", b =>
@@ -169,7 +169,7 @@ namespace BikeSharingApp.Migrations
 
                     b.HasIndex("BookingId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("BikeSharingApp.Models.Role", b =>
@@ -190,7 +190,7 @@ namespace BikeSharingApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("BikeSharingApp.Models.User", b =>
@@ -227,7 +227,7 @@ namespace BikeSharingApp.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("BikeSharingApp.Models.Bike", b =>
