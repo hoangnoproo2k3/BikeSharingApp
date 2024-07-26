@@ -1,8 +1,159 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang Chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Bike Sharing</h1>
-    <p>Find and share bikes in your community.</p>
-</div>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>@ViewData["Title"] - Cộng Đồng Chia Sẻ Phương Tiện Giao Thông</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+    .hero {
+        background: url('https://static.giant-bicycles.com/Images/Shared/Pages/Local/road-bike-upgrade_1587478953.jpg') no-repeat center center;
+        background-size: cover;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        padding: 100px 0;
+    }
+
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+    }
+
+    .community-story {
+        background: #f8f9fa;
+        padding: 50px 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+    }
+
+    .call-to-action {
+        background: #007bff;
+        color: white;
+        padding: 50px 20px;
+        text-align: center;
+        border-radius: 8px;
+    }
+
+    .call-to-action a {
+        color: white;
+        font-size: 1.5em;
+        margin-top: 20px;
+        display: inline-block;
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
+
+<body>
+    <!-- Hero Section -->
+    <div class="hero text-center">
+        <div class="container">
+            <h1 class="display-4">Tham Gia Cộng Đồng Chia Sẻ Phương Tiện</h1>
+            <p class="lead">Chia sẻ chuyến đi của bạn hoặc tìm chuyến đi dễ dàng và giúp giảm thiểu ùn tắc giao thông.
+            </p>
+            <a class="btn btn-primary btn-lg" href="#" role="button">Bắt Đầu Ngay</a>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="container my-5">
+        <div class="row text-center mt-4">
+            <div class="col-md-4">
+                <img src="https://as2.ftcdn.net/v2/jpg/00/32/86/03/1000_F_32860381_peOPuBzShbL4s2aBxuOx5TideLhKDpus.jpg"
+                    class="rounded-circle feature-icon" alt="Step 1">
+                <h3>Tạo Tài Khoản</h3>
+                <p>Đăng ký và tham gia cộng đồng để bắt đầu chia sẻ hoặc tìm chuyến đi.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmc5PpPxlCAv4eV2wd4X7djZDdi47JfcnzLpmjbSuZDi5lGt78cMABP1qdTEDGi7YsNJo&usqp=CAU"
+                    class="rounded-circle feature-icon" alt="Step 2">
+                <h3>Chia Sẻ / Tìm Chuyến Đi</h3>
+                <p>Dễ dàng chia sẻ chi tiết chuyến đi của bạn hoặc tìm kiếm chuyến đi có sẵn trong khu vực của bạn.</p>
+            </div>
+            <div class="col-md-4">
+                <img src="https://media.istockphoto.com/id/1333357407/vector/enjoy-the-journey-with-your-bike-hand-drawn-typography-poster-design.jpg?s=612x612&w=0&k=20&c=BKp9xPtQBHBYuPqZs7yN_7kaDzVEcAqkrxAQ3p7p2gk="
+                    class="rounded-circle feature-icon" alt="Step 3">
+                <h3>Thưởng Thức Hành Trình</h3>
+                <p>Đi cùng nhau, tiết kiệm chi phí và giúp giảm thiểu ùn tắc giao thông và ô nhiễm.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Rides Section -->
+    <div class="container my-5">
+        <h2 class="text-center">Xe Đạp Nổi Bật</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://cdn.alongwalk.info/vn/wp-content/uploads/2022/06/17174913/image-1001-dia-chi-thue-xe-dap-ho-tay-note-ngay-de-di-chill-cung-ban-than-165543775386627.jpg"
+                        class="card-img-top" alt="Bike 1">
+                    <div class="card-body">
+                        <h5 class="card-title">Xe Đạp từ HN đến Hải Phòng</h5>
+                        <p class="card-text">Khởi hành: Ngày mai 9:00 AM</p>
+                        <a href="#" class="btn btn-primary">Thuê Xe Đạp</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://cdn.alongwalk.info/vn/wp-content/uploads/2022/06/17174909/image-1001-dia-chi-thue-xe-dap-ho-tay-note-ngay-de-di-chill-cung-ban-than-165543774991955.jpg"
+                        class="card-img-top" alt="Bike 2">
+                    <div class="card-body">
+                        <h5 class="card-title">Xe Đạp từ TP.HCM đến Vũng Tàu</h5>
+                        <p class="card-text">Khởi hành: Hôm nay 5:00 PM</p>
+                        <a href="#" class="btn btn-primary">Thuê Xe Đạp</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="https://cdn.alongwalk.info/vn/wp-content/uploads/2022/06/17174912/image-1001-dia-chi-thue-xe-dap-ho-tay-note-ngay-de-di-chill-cung-ban-than-165543775273524.jpg"
+                        class="card-img-top" alt="Bike 3">
+                    <div class="card-body">
+                        <h5 class="card-title">Xe Đạp từ Đà Nẵng đến Huế</h5>
+                        <p class="card-text">Khởi hành: Thứ Hai tới 8:00 AM</p>
+                        <a href="#" class="btn btn-primary">Thuê Xe Đạp</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Community Stories Section -->
+    <div class="container my-5">
+        <h2>Cộng Đồng</h2>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="community-story">
+                    <h4>Hành Trình của Anh John</h4>
+                    <p>"Nhờ vào TransportShare, tôi tìm được chuyến đi đến chỗ làm mỗi ngày, tiết kiệm tiền và kết
+                        bạn mới trên đường đi."</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="community-story">
+                    <h4>Trải Nghiệm của Chị Jane</h4>
+                    <p>"Chia sẻ xe của tôi với người khác đã là một trải nghiệm đáng nhớ. Tôi đã gặp gỡ những người
+                        tuyệt vời và giảm chi phí đi lại."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action Section -->
+    <div class="container my-5">
+        <div class="call-to-action">
+            <h2>Sẵn Sàng Tham Gia Cộng Đồng?</h2>
+            <p>Đăng ký ngay hôm nay và bắt đầu chia sẻ hoặc tìm kiếm chuyến đi trong khu vực của bạn.</p>
+            <a class="btn btn-light btn-lg text-black" href="#" role="button">Đăng Ký Ngay</a>
+        </div>
+    </div>
+</body>
+
+</html>

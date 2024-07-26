@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BikeSharingApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240725150722_InitialCreate")]
+    [Migration("20240726140632_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -35,18 +35,15 @@ namespace BikeSharingApp.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BikeName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BikeStatus")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -54,19 +51,17 @@ namespace BikeSharingApp.Migrations
 
                     b.Property<string>("Img")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LocationId")
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OwnerId")
+                    b.Property<int?>("OwnerId")
                         .HasColumnType("int");
 
                     b.Property<string>("OwnerPhone")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -76,8 +71,7 @@ namespace BikeSharingApp.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -96,10 +90,10 @@ namespace BikeSharingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BikeId")
+                    b.Property<int?>("BikeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
@@ -114,8 +108,7 @@ namespace BikeSharingApp.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
@@ -139,18 +132,15 @@ namespace BikeSharingApp.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Coordinates")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -165,7 +155,7 @@ namespace BikeSharingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookingId")
+                    b.Property<int?>("BookingId")
                         .HasColumnType("int");
 
                     b.Property<string>("Comment")
@@ -195,13 +185,11 @@ namespace BikeSharingApp.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -221,13 +209,11 @@ namespace BikeSharingApp.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -235,10 +221,9 @@ namespace BikeSharingApp.Migrations
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -251,16 +236,12 @@ namespace BikeSharingApp.Migrations
             modelBuilder.Entity("BikeSharingApp.Models.Bike", b =>
                 {
                     b.HasOne("BikeSharingApp.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("Bikes")
+                        .HasForeignKey("LocationId");
 
                     b.HasOne("BikeSharingApp.Models.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("OwnedBikes")
+                        .HasForeignKey("OwnerId");
 
                     b.Navigation("Location");
 
@@ -270,16 +251,12 @@ namespace BikeSharingApp.Migrations
             modelBuilder.Entity("BikeSharingApp.Models.Booking", b =>
                 {
                     b.HasOne("BikeSharingApp.Models.Bike", "Bike")
-                        .WithMany()
-                        .HasForeignKey("BikeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("Bookings")
+                        .HasForeignKey("BikeId");
 
                     b.HasOne("BikeSharingApp.Models.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("Bookings")
+                        .HasForeignKey("CustomerId");
 
                     b.Navigation("Bike");
 
@@ -289,10 +266,8 @@ namespace BikeSharingApp.Migrations
             modelBuilder.Entity("BikeSharingApp.Models.Review", b =>
                 {
                     b.HasOne("BikeSharingApp.Models.Booking", "Booking")
-                        .WithMany()
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("Reviews")
+                        .HasForeignKey("BookingId");
 
                     b.Navigation("Booking");
                 });
@@ -300,12 +275,37 @@ namespace BikeSharingApp.Migrations
             modelBuilder.Entity("BikeSharingApp.Models.User", b =>
                 {
                     b.HasOne("BikeSharingApp.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("BikeSharingApp.Models.Bike", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
+            modelBuilder.Entity("BikeSharingApp.Models.Booking", b =>
+                {
+                    b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("BikeSharingApp.Models.Location", b =>
+                {
+                    b.Navigation("Bikes");
+                });
+
+            modelBuilder.Entity("BikeSharingApp.Models.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("BikeSharingApp.Models.User", b =>
+                {
+                    b.Navigation("Bookings");
+
+                    b.Navigation("OwnedBikes");
                 });
 #pragma warning restore 612, 618
         }

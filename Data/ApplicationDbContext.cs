@@ -6,7 +6,7 @@ namespace BikeSharingApp.Data
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+           : base(options)
         {
         }
 
@@ -19,49 +19,36 @@ namespace BikeSharingApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            // Cấu hình quan hệ User - Role
+            // Cấu hình các mối quan hệ và các ràng buộc khác nếu cần
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)
-                .WithMany()
-                .HasForeignKey(u => u.RoleId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId);
 
-            // Cấu hình quan hệ Bike - Owner (User)
             modelBuilder.Entity<Bike>()
                 .HasOne(b => b.Owner)
-                .WithMany()
-                .HasForeignKey(b => b.OwnerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(u => u.OwnedBikes)
+                .HasForeignKey(b => b.OwnerId);
 
-            // Cấu hình quan hệ Bike - Location
             modelBuilder.Entity<Bike>()
                 .HasOne(b => b.Location)
-                .WithMany()
-                .HasForeignKey(b => b.LocationId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(l => l.Bikes)
+                .HasForeignKey(b => b.LocationId);
 
-            // Cấu hình quan hệ Booking - Customer (User)
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Customer)
-                .WithMany()
-                .HasForeignKey(b => b.CustomerId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(u => u.Bookings)
+                .HasForeignKey(b => b.CustomerId);
 
-            // Cấu hình quan hệ Booking - Bike
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Bike)
-                .WithMany()
-                .HasForeignKey(b => b.BikeId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(bk => bk.Bookings)
+                .HasForeignKey(b => b.BikeId);
 
-            // Cấu hình quan hệ Review - Booking
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Booking)
-                .WithMany()
-                .HasForeignKey(r => r.BookingId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .WithMany(b => b.Reviews)
+                .HasForeignKey(r => r.BookingId);
         }
     }
 }
