@@ -1,0 +1,21 @@
+@model BikeSharingApp.Models.Bike
+
+@{
+    ViewData["Title"] = "Bike Details";
+}
+
+<div class="container">
+    <h1>@Model.BikeName</h1>
+    <div class="card">
+        <img src="@Model.Img" class="card-img-top" alt="@Model.BikeName">
+        <div class="card-body">
+            <h5 class="card-title">@Model.BikeName</h5>
+            <p class="card-text">Price: $@Model.Price</p>
+            <p class="card-text">Status: @Model.BikeStatus</p>
+            <p class="card-text">Location: @Model.Location?.Name</p>
+            <p class="card-text">Description: @Model.Description</p>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+            <a class="btn btn-secondary" asp-controller="Bikes" asp-action="ListBikes">Back to List</a>
+        </div>
+    </div>
+</div>

@@ -10,6 +10,12 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BikeSharingApp.styles.css" asp-append-version="true" />
+<style>
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
 </head>
 
 <body>
@@ -41,7 +47,7 @@
                             var user = Context.Session.Get<User>("User");
                             var emailName = user.Email.Split('@')[0];
                             <li class="nav-item d-flex align-items-center">
-                                <span class="navbar-text me-2">Welcome, @user.FullName</span>
+                                <a class="navbar-text me-2" asp-controller="Account" asp-action="Profile">Welcome, @user.FullName</a>
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="nav-link mb-0">
                                     <button type="submit" class="btn btn-link">Logout</button>
                                 </form>

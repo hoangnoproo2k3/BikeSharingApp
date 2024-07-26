@@ -1,6 +1,16 @@
 @model IEnumerable<BikeSharingApp.Models.Bike>
 
+@{
+    ViewData["Title"] = "List of Bikes";
+}
+
 <div class="container">
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <a class="btn btn-primary" asp-controller="Bikes" asp-action="Create">Create New Bike</a>
+        </div>
+    </div>
+    
     <div class="row">
         @foreach (var bike in Model)
         {
@@ -12,7 +22,7 @@
                         <p class="card-text">Price: $@bike.Price</p>
                         <p class="card-text">Status: @bike.BikeStatus</p>
                         <p class="card-text">Location: @bike.Location?.Name</p>
-                        @* <p class="card-text">VerifyKey: @bike.VerifyKey</p> *@
+                        <a class="btn btn-info" asp-controller="Bikes" asp-action="Details" asp-route-id="@bike.Id">View Details</a>
                     </div>
                 </div>
             </div>

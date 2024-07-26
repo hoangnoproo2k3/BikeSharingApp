@@ -84,6 +84,56 @@ namespace BikeSharingApp.Controllers
             HttpContext.Session.Remove("User");
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            var user = HttpContext.Session.Get<User>("User");
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var model = new ProfileViewModel
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+                Phone = user.Phone
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = HttpContext.Session.Get<User>("User");
+                if (user == null)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var userToUpdate = await _context.Users.FindAsync(user.Id);
+                if (userToUpdate != null)
+                {
+                    userToUpdate.FullName = model.FullName;
+                    userToUpdate.Email = model.Email;
+                    userToUpdate.Phone = model.Phone;
+
+                    _context.Users.Update(userToUpdate);
+                    await _context.SaveChangesAsync();
+
+                    // Cập nhật thông tin người dùng trong session
+                    HttpContext.Session.Set("User", userToUpdate);
+
+                    TempData["SuccessMessage"] = "Profile updated successfully.";
+                    return RedirectToAction("Profile");
+                }
+            }
+
+            return View("Profile", model);
+        }
     }
 
 }
