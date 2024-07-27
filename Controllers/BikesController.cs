@@ -64,46 +64,37 @@ namespace BikeSharingApp.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-
-            if (ModelState.IsValid)
+            try
             {
-                try
+                var bike = new Bike
                 {
-                    _logger.LogInformation("Creating bike with the following details: {@BikeModel}", model);
-                    var bike = new Bike
-                    {
-                        BikeName = model.BikeName,
-                        Address = model.Address,
-                        Price = model.Price,
-                        OwnerPhone = model.OwnerPhone,
-                        BikeStatus = model.BikeStatus,
-                        Description = model.Description,
-                        Img = await SaveFileAsync(model.Img),
-                        LocationId = model.LocationId,
-                        PricePerHour = model.PricePerHour,
-                        OwnerId = user.Id
-                    };
-
-                    await _repository.AddBikeAsync(bike);
-
-                    TempData["SuccessMessage"] = "Bike created successfully.";
-                    return RedirectToAction("ListBikes");
-                }
-                catch (Exception ex)
+                    BikeName = model.BikeName,
+                    Price = model.Price,
+                    Description = model.Description,
+                    LocationId = model.LocationId,
+                    PricePerHour = model.PricePerHour,
+                    OwnerId = user.Id
+                };
+                if (model.Img != null)
                 {
-                    _logger.LogInformation($"===============Failed to create bike: {ex}");
-                    ModelState.AddModelError(string.Empty, "An error occurred while creating the bike. Please try again.");
+                    bike.Img = await SaveFileAsync(model.Img);
                 }
+
+                await _repository.AddBikeAsync(bike);
+                TempData["SuccessMessage"] = "Bike created successfully.";
+                return RedirectToAction("ListBikes");
             }
-
-            // Reload locations for view in case of validation errors
-            model.Locations = (await _repository.GetAllLocationsAsync()).Select(l => new SelectListItem
+            catch (Exception ex)
             {
-                Value = l.Id.ToString(),
-                Text = l.Name
-            }).ToList();
+                ModelState.AddModelError(string.Empty, "An error occurred while creating the bike. Please try again.");
+                model.Locations = (await _repository.GetAllLocationsAsync()).Select(l => new SelectListItem
+                {
+                    Value = l.Id.ToString(),
+                    Text = l.Name
+                }).ToList();
 
-            return View(model);
+                return View("Create", model);
+            }
         }
         private async Task<string> SaveFileAsync(IFormFile file)
         {
@@ -118,7 +109,7 @@ namespace BikeSharingApp.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            return "/images/" + fileName; // Return relative path for storing in the database
+            return "/images/" + fileName;
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
@@ -139,10 +130,7 @@ namespace BikeSharingApp.Controllers
             {
                 Id = bike.Id,
                 BikeName = bike.BikeName,
-                Address = bike.Address,
                 Price = bike.Price,
-                OwnerPhone = bike.OwnerPhone,
-                BikeStatus = bike.BikeStatus,
                 Description = bike.Description,
                 LocationId = bike.LocationId,
                 PricePerHour = bike.PricePerHour,
@@ -153,9 +141,9 @@ namespace BikeSharingApp.Controllers
                     Text = l.Name
                 }).ToList()
             };
-
             return View("Create", model);  // Sử dụng lại view Create cho chức năng Edit
         }
+        [HttpPost]
         [HttpPost]
         public async Task<IActionResult> Edit(CreateBikeViewModel model)
         {
@@ -164,52 +152,46 @@ namespace BikeSharingApp.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-
-            if (ModelState.IsValid)
+            try
             {
-                try
+                var bike = await _repository.GetBikeByIdAsync(model.Id);
+                if (bike == null)
                 {
-                    var bike = await _repository.GetBikeByIdAsync(model.Id);
-                    if (bike == null)
-                    {
-                        return NotFound();
-                    }
-
-                    bike.BikeName = model.BikeName;
-                    bike.Address = model.Address;
-                    bike.Price = model.Price;
-                    bike.OwnerPhone = model.OwnerPhone;
-                    bike.BikeStatus = model.BikeStatus;
-                    bike.Description = model.Description;
-                    bike.LocationId = model.LocationId;
-                    bike.PricePerHour = model.PricePerHour;
-
-                    if (model.Img != null)
-                    {
-                        bike.Img = await SaveFileAsync(model.Img);
-                    }
-
-                    await _repository.UpdateBikeAsync(bike);
-
-                    TempData["SuccessMessage"] = "Bike updated successfully.";
-                    return RedirectToAction("ListBikes");
+                    return NotFound();
                 }
-                catch (Exception ex)
+
+                bike.BikeName = model.BikeName;
+                bike.Price = model.Price;
+                bike.Description = model.Description;
+                bike.LocationId = model.LocationId;
+                bike.PricePerHour = model.PricePerHour;
+
+                // Check if a new image is uploaded; otherwise, keep the existing one
+                if (model.Img != null)
                 {
-                    // Log the error (uncomment the line below once you have a logger)
-                    // _logger.LogError($"Failed to update bike: {ex}");
-                    ModelState.AddModelError(string.Empty, "An error occurred while updating the bike. Please try again.");
+                    bike.Img = await SaveFileAsync(model.Img);
                 }
+                else
+                {
+                    bike.Img = model.ExistingImg; // Keep the existing image if no new image is uploaded
+                }
+
+                await _repository.UpdateBikeAsync(bike);
+
+                TempData["SuccessMessage"] = "Bike updated successfully.";
+                return RedirectToAction("ListBikes");
             }
-
-            // Reload locations for view in case of validation errors
-            model.Locations = (await _repository.GetAllLocationsAsync()).Select(l => new SelectListItem
+            catch (Exception ex)
             {
-                Value = l.Id.ToString(),
-                Text = l.Name
-            }).ToList();
+                ModelState.AddModelError(string.Empty, "An error occurred while updating the bike. Please try again.");
+                model.Locations = (await _repository.GetAllLocationsAsync()).Select(l => new SelectListItem
+                {
+                    Value = l.Id.ToString(),
+                    Text = l.Name
+                }).ToList();
 
-            return View("Create", model);  // Sử dụng lại view Create cho chức năng Edit
+                return View("Create", model);
+            }
         }
 
     }

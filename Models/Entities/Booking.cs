@@ -11,11 +11,9 @@ namespace BikeSharingApp.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal TotalPrice { get; set; }
-        public string Note { get; set; }
         public string Status { get; set; }
-
         public User Customer { get; set; }
         public Bike Bike { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+        // public ICollection<Review> Reviews { get; set; }
     }
 }

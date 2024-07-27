@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BikeSharingApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240726140632_InitialCreate")]
+    [Migration("20240727082417_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,15 +33,7 @@ namespace BikeSharingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("BikeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BikeStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -50,7 +42,6 @@ namespace BikeSharingApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Img")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LocationId")
@@ -59,19 +50,11 @@ namespace BikeSharingApp.Migrations
                     b.Property<int?>("OwnerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("OwnerPhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("PricePerHour")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -98,10 +81,6 @@ namespace BikeSharingApp.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -145,34 +124,6 @@ namespace BikeSharingApp.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Locations");
-                });
-
-            modelBuilder.Entity("BikeSharingApp.Models.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookingId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("BikeSharingApp.Models.Role", b =>
@@ -263,15 +214,6 @@ namespace BikeSharingApp.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("BikeSharingApp.Models.Review", b =>
-                {
-                    b.HasOne("BikeSharingApp.Models.Booking", "Booking")
-                        .WithMany("Reviews")
-                        .HasForeignKey("BookingId");
-
-                    b.Navigation("Booking");
-                });
-
             modelBuilder.Entity("BikeSharingApp.Models.User", b =>
                 {
                     b.HasOne("BikeSharingApp.Models.Role", "Role")
@@ -284,11 +226,6 @@ namespace BikeSharingApp.Migrations
             modelBuilder.Entity("BikeSharingApp.Models.Bike", b =>
                 {
                     b.Navigation("Bookings");
-                });
-
-            modelBuilder.Entity("BikeSharingApp.Models.Booking", b =>
-                {
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("BikeSharingApp.Models.Location", b =>

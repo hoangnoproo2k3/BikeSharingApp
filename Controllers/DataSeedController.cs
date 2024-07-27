@@ -21,7 +21,7 @@ namespace BikeSharingApp.Controllers
             CreateLocations();
             CreateBikes();
             CreateBookings();
-            CreateReviews();
+            // CreateReviews();
 
             return Content("Data seeded successfully");
         }
@@ -95,30 +95,20 @@ namespace BikeSharingApp.Controllers
                 new Bike
                 {
                     BikeName = "Mountain Bike",
-                    Address = "123 Main St, City",
                     Price = 100.00m,
                     OwnerId = 1,
-                    OwnerPhone = "1234567890",
-                    BikeStatus = "Available",
                     Description = "Great mountain bike for off-road adventures",
-                    Img = "mountain-bike.jpg",
                     LocationId = 1,
                     PricePerHour = 5.00m,
-                    Status = "Active"
                 },
                 new Bike
                 {
                     BikeName = "City Cruiser",
-                    Address = "456 Park Ave, Suburb",
                     Price = 80.00m,
                     OwnerId = 2,
-                    OwnerPhone = "0987654321",
-                    BikeStatus = "Available",
                     Description = "Comfortable bike for city rides",
-                    Img = "city-cruiser.jpg",
                     LocationId = 2,
                     PricePerHour = 4.00m,
-                    Status = "Active"
                 }
             };
 
@@ -137,29 +127,11 @@ namespace BikeSharingApp.Controllers
                     StartDate = DateTime.Now.AddDays(1),
                     EndDate = DateTime.Now.AddDays(2),
                     TotalPrice = 24.00m,
-                    Note = "Day trip",
                     Status = "Confirmed"
                 }
             };
 
             _context.Bookings.AddRange(bookings);
-            _context.SaveChanges();
-        }
-
-        private void CreateReviews()
-        {
-            var reviews = new List<Review>
-            {
-                new Review
-                {
-                    BookingId = 1,
-                    Rating = 5,
-                    Comment = "Great bike and service!",
-                    CreatedDate = DateTime.Now
-                }
-            };
-
-            _context.Reviews.AddRange(reviews);
             _context.SaveChanges();
         }
 

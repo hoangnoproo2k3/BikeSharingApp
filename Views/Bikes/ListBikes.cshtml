@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "List of Bikes";
+    var defaultImage = "/images/xemau.jpg"; // Path to the default image
 }
 
 <div class="container">
@@ -10,18 +11,19 @@
             <a class="btn btn-primary" asp-controller="Bikes" asp-action="Create">Create New Bike</a>
         </div>
     </div>
-    
+
     <div class="row">
         @foreach (var bike in Model)
         {
             <div class="col-md-4 col-sm-12 mb-4">
                 <div class="card">
-                    <img src="@bike.Img" class="card-img-top" alt="@bike.BikeName">
+                    <img src="@(!string.IsNullOrEmpty(bike.Img) ? bike.Img : defaultImage)" class="card-img-top" alt="@bike.BikeName">
                     <div class="card-body">
                         <h5 class="card-title">@bike.BikeName</h5>
                         <p class="card-text">Price: $@bike.Price</p>
-                        <p class="card-text">Status: @bike.BikeStatus</p>
+                        <p class="card-text">PricePerHour: $@bike.PricePerHour</p>
                         <p class="card-text">Location: @bike.Location?.Name</p>
+                        <p class="card-text text-sm">Description: @bike.Description</p>
                         <a class="btn btn-info" asp-controller="Bikes" asp-action="Details" asp-route-id="@bike.Id">View Details</a>
                     </div>
                 </div>

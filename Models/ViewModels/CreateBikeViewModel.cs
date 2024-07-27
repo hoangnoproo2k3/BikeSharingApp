@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -6,37 +6,41 @@ namespace BikeSharingApp.Models
 {
     public class CreateBikeViewModel
     {
-        public int Id { get; set; }  // Thêm thuộc tính Id
+        public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Bike name is required.")]
+        [Display(Name = "Bike Name")]
+        [StringLength(100, ErrorMessage = "Bike name cannot be longer than 100 characters.")]
         public string BikeName { get; set; }
 
-        [Required]
-        public string Address { get; set; }
-
-        [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid price")]
+        [Required(ErrorMessage = "Price is required.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
+        [DataType(DataType.Currency)]
+        [Display(Name = "Price")]
         public decimal Price { get; set; }
 
-        [Required]
-        public string OwnerPhone { get; set; }
+        [Display(Name = "Description")]
+        [StringLength(500, ErrorMessage = "Description cannot be longer than 500 characters.")]
+        public string? Description { get; set; }
 
-        [Required]
-        public string BikeStatus { get; set; }
+        [Display(Name = "Image")]
+        [DataType(DataType.Upload)]
+        public IFormFile? Img { get; set; }
 
-        public string Description { get; set; }
-
-        public IFormFile Img { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "Location is required.")]
+        [Display(Name = "Location")]
         public int? LocationId { get; set; }
 
-        [Required]
-        [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid price per hour")]
+        [Required(ErrorMessage = "Price per hour is required.")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price per hour must be greater than 0.")]
+        [DataType(DataType.Currency)]
+        [Display(Name = "Price Per Hour")]
         public decimal PricePerHour { get; set; }
 
         public List<SelectListItem> Locations { get; set; }
 
-        public string ExistingImg { get; set; }  // Thêm thuộc tính ExistingImg
+        [Display(Name = "Existing Image")]
+        public string ExistingImg { get; set; }
     }
+
 }
