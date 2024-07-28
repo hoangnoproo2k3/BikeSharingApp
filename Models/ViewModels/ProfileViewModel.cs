@@ -13,6 +13,13 @@ namespace BikeSharingApp.Models
 
         [Phone]
         public string Phone { get; set; }
-        public IEnumerable<Bike> Bikes { get; set; }
+        public IEnumerable<Bike> CreatedBikes { get; set; }
+        public IEnumerable<ReservedBikesModel> ReservedBikes { get; set; }
+    }
+    public class ReservedBikesModel
+    {
+        public Bike Bike { get; set; }
+        public Booking Booking { get; set; }
+        public Status Status { get; set; }
     }
 }

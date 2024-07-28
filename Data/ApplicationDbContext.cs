@@ -15,6 +15,7 @@ namespace BikeSharingApp.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<Bike> Bikes { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Status> Statuses { get; set; }
         // public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,6 +46,10 @@ namespace BikeSharingApp.Data
                 .WithMany(bk => bk.Bookings)
                 .HasForeignKey(b => b.BikeId);
 
+            modelBuilder.Entity<Booking>()
+                          .HasOne(b => b.Status)
+                          .WithMany()
+                          .HasForeignKey(b => b.StatusId);
             // modelBuilder.Entity<Review>()
             //     .HasOne(r => r.Booking)
             //     .WithMany(b => b.Reviews)

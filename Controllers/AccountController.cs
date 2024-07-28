@@ -92,13 +92,35 @@ namespace BikeSharingApp.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+            // Lấy danh sách xe đã tạo bởi người dùng
+            var createdBikes = _context.Bikes.Where(b => b.OwnerId == user.Id).ToList();
+            var locations = _context.Locations.ToList();
 
+            // Lấy danh sách xe đã đặt bởi người dùng thông qua Booking
+            // var reservedBikeIds = _context.Bookings
+            //                                 .Where(b => b.CustomerId == user.Id)
+            //                                 .Select(b => b.BikeId)
+            //                                 .ToList();
+            // var reservedBikes = _context.Bikes
+            //                             .Where(b => reservedBikeIds.Contains(b.Id))
+            //                             .ToList();
+            var reservedBikes = (from booking in _context.Bookings
+                                 join bike in _context.Bikes on booking.BikeId equals bike.Id
+                                 join status in _context.Statuses on booking.StatusId equals status.Id
+                                 where booking.CustomerId == user.Id
+                                 select new ReservedBikesModel
+                                 {
+                                     Bike = bike,
+                                     Booking = booking,
+                                     Status = status
+                                 }).ToList();
             var model = new ProfileViewModel
             {
                 FullName = user.FullName,
                 Email = user.Email,
                 Phone = user.Phone,
-                Bikes = _context.Bikes.Where(b => b.OwnerId == user.Id).ToList()
+                CreatedBikes = createdBikes,
+                ReservedBikes = reservedBikes
             };
 
             return View(model);
@@ -107,30 +129,27 @@ namespace BikeSharingApp.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
         {
-            if (ModelState.IsValid)
+            var user = HttpContext.Session.Get<User>("User");
+            if (user == null)
             {
-                var user = HttpContext.Session.Get<User>("User");
-                if (user == null)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
+                return RedirectToAction("Login", "Account");
+            }
 
-                var userToUpdate = await _context.Users.FindAsync(user.Id);
-                if (userToUpdate != null)
-                {
-                    userToUpdate.FullName = model.FullName;
-                    userToUpdate.Email = model.Email;
-                    userToUpdate.Phone = model.Phone;
+            var userToUpdate = await _context.Users.FindAsync(user.Id);
+            if (userToUpdate != null)
+            {
+                userToUpdate.FullName = model.FullName;
+                userToUpdate.Email = model.Email;
+                userToUpdate.Phone = model.Phone;
 
-                    _context.Users.Update(userToUpdate);
-                    await _context.SaveChangesAsync();
+                _context.Users.Update(userToUpdate);
+                await _context.SaveChangesAsync();
 
-                    // Cập nhật thông tin người dùng trong session
-                    HttpContext.Session.Set("User", userToUpdate);
+                // Cập nhật thông tin người dùng trong session
+                HttpContext.Session.Set("User", userToUpdate);
 
-                    TempData["SuccessMessage"] = "Profile updated successfully.";
-                    return RedirectToAction("Profile");
-                }
+                TempData["SuccessMessage"] = "Profile updated successfully.";
+                return RedirectToAction("Profile");
             }
 
             return View("Profile", model);

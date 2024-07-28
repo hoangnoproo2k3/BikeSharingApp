@@ -3,54 +3,103 @@
     ViewData["Title"] = "Profile";
     var defaultImage = "/images/xemau.jpg";
 }
-
-<h2>Cập nhật tài khoản</h2>
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
-
-<form asp-action="UpdateProfile" method="post">
-    <div class="form-group">
-        <label asp-for="FullName"></label>
-        <input asp-for="FullName" class="form-control" />
-        <span asp-validation-for="FullName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Phone"></label>
-        <input asp-for="Phone" class="form-control" />
-        <span asp-validation-for="Phone" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary my-4">Update Profile</button>
-</form>
-
-<h2>Danh sách phương tiện bạn đã tạo</h2>
-
-<div class="row my-4">
-    @foreach (var bike in Model.Bikes)
-    {
-        <div class="col-md-4 col-sm-12 mb-4">
-            <div class="card">
-                <img src="@(!string.IsNullOrEmpty(bike.Img) ? bike.Img : defaultImage)" class="card-img-top"
-                    alt="@bike.BikeName">
-                <div class="card-body">
-                    <h5 class="card-title">@bike.BikeName</h5>
-                    <p class="card-text">Price: $@bike.Price</p>
-                    <p class="card-text">PricePerHour: $@bike.PricePerHour</p>
-                    <p class="card-text">Location: @bike.Location?.Name</p>
-                    <p class="card-text text-sm">Description: @bike.Description</p>
-                    <a class="btn btn-info" asp-controller="Vehicle" asp-action="Details" asp-route-id="@bike.Id">View
-                        Details</a>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <img src="/images/avata.jpg" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                    <h5 class="my-3">@Model.FullName</h5>
+                    <p class="text-muted mb-1">@Model.Email</p>
+                    <p class="text-muted mb-4">@Model.Phone</p>
                 </div>
             </div>
         </div>
-    }
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="mb-4">Cập nhật tài khoản</h2>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @TempData["SuccessMessage"]
+                        </div>
+                    }
+                    <form asp-action="UpdateProfile" method="post">
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label"></label>
+                            <input asp-for="FullName" class="form-control" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Phone" class="form-label"></label>
+                            <input asp-for="Phone" class="form-control" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cập nhật hồ sơ</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="mb-4">Phương tiện của bạn</h2>
+            <div class="row">
+                @foreach (var bike in Model.CreatedBikes)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="@(!string.IsNullOrEmpty(bike.Img) ? bike.Img : defaultImage)" class="card-img-top"
+                                alt="@bike.BikeName">
+                            <div class="card-body">
+                                <h5 class="card-title">@bike.BikeName</h5>
+                                <p class="card-text"><strong>Giá:</strong> $@bike.Price</p>
+                                <p class="card-text"><strong>Giá/giờ:</strong> $@bike.PricePerHour</p>
+                                <p class="card-text"><strong>Địa điểm:</strong> @bike.Location?.Name</p>
+                                <p class="card-text text-muted">@bike.Description</p>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <a class="btn btn-outline-primary w-100" asp-controller="Vehicle" asp-action="Details"
+                                    asp-route-id="@bike.Id">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="mb-4">Phương tiện bạn đã đặt</h2>
+            <div class="row">
+                @foreach (var bike in Model.ReservedBikes)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="@(!string.IsNullOrEmpty(bike.Bike.Img) ? bike.Bike.Img : defaultImage)"
+                                class="card-img-top" alt="@bike.Bike.BikeName">
+                            <div class="card-body">
+                                <h5 class="card-title">@bike.Bike.BikeName</h5>
+                                <p class="card-text"><strong>Tổng giá:</strong> $@bike.Booking.TotalPrice</p>
+                                <p class="card-text"><strong>Trạng thái:</strong> <span
+                                        class="badge bg-primary">@bike.Status.Name</span></p>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <a class="btn btn-outline-primary w-100" asp-controller="Vehicle" asp-action="Details"
+                                    asp-route-id="@bike.Bike.Id">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,52 +1,28 @@
 ﻿@model BikeSharingApp.Models.MultipleListsViewModel
-<link rel="stylesheet" href="~/css/home.css" />
 @{
     ViewData["Title"] = "Trang chủ";
     var defaultImage = "/images/xemau.jpg";
 }
+
+<link rel="stylesheet" href="~/css/home.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 <div class="hero-section">
     <div class="container">
-        <h1>Chia sẻ phương tiện xe đạp - Kết nối cộng đồng</h1>
-        <p>Tìm kiếm và chia sẻ phương tiện giao thông một cách dễ dàng</p>
+        <h1 class="display-4">Chia sẻ phương tiện xe đạp - Kết nối cộng đồng</h1>
+        <p class="lead">Tìm kiếm và chia sẻ phương tiện giao thông một cách dễ dàng</p>
         <a href="@Url.Action("Search", "Vehicle")" class="btn btn-primary btn-lg">Tìm phương tiện ngay</a>
     </div>
 </div>
 
-<div class="how-it-works my-4">
+<div class="search-box py-5 bg-light">
     <div class="container">
-        <h2>Cách thức hoạt động</h2>
-        <div class="row text-center mt-4">
-            <div class="col-md-4">
-                <img style="height: 100px; width: 100px;"
-                    src="https://as2.ftcdn.net/v2/jpg/00/32/86/03/1000_F_32860381_peOPuBzShbL4s2aBxuOx5TideLhKDpus.jpg"
-                    class="rounded-circle feature-icon" alt="Step 1">
-                <h3>Tạo Tài Khoản</h3>
-                <p>Đăng ký và tham gia cộng đồng để bắt đầu chia sẻ hoặc tìm chuyến đi.</p>
-            </div>
-            <div class="col-md-4">
-                <img style="height: 100px; width: 100px;"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmc5PpPxlCAv4eV2wd4X7djZDdi47JfcnzLpmjbSuZDi5lGt78cMABP1qdTEDGi7YsNJo&usqp=CAU"
-                    class="rounded-circle feature-icon" alt="Step 2">
-                <h3>Chia Sẻ / Tìm Chuyến Đi</h3>
-                <p>Dễ dàng chia sẻ chi tiết chuyến đi của bạn hoặc tìm kiếm chuyến đi có sẵn trong khu vực của bạn.</p>
-            </div>
-            <div class="col-md-4">
-                <img style="height: 100px; width: 100px;"
-                    src="https://media.istockphoto.com/id/1333357407/vector/enjoy-the-journey-with-your-bike-hand-drawn-typography-poster-design.jpg?s=612x612&w=0&k=20&c=BKp9xPtQBHBYuPqZs7yN_7kaDzVEcAqkrxAQ3p7p2gk="
-                    class="rounded-circle feature-icon" alt="Step 3">
-                <h3>Thưởng Thức Hành Trình</h3>
-                <p>Đi cùng nhau, tiết kiệm chi phí và giúp giảm thiểu ùn tắc giao thông và ô nhiễm.</p>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="search-box mb-4">
-    <div class="container">
+        <h2 class="text-center mb-4">Tìm kiếm phương tiện</h2>
         <form asp-controller="Vehicle" asp-action="Search" method="get">
-            <div class="row">
-                <div class="col-md-3">
-                    <select name="location" class="form-control">
-                        <option value="">Địa điểm</option>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <select name="location" class="form-control form-control-lg">
+                        <option value="">Chọn địa điểm</option>
                         @foreach (var location in Model.Locations)
                         {
                             <option value="@location.Id">@location.Name</option>
@@ -54,31 +30,64 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary btn-block">Tìm kiếm</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Tìm kiếm</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<div class="featured-vehicles">
+
+<div class="how-it-works py-5">
     <div class="container">
-        <h2 class="my-4">Phương tiện nổi bật</h2>
+        <h2 class="text-center mb-5">Cách thức hoạt động</h2>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="icon-box">
+                    <span class="icon">&#128100;</span>
+                    <h3>Tạo Tài Khoản</h3>
+                    <p>Đăng ký và tham gia cộng đồng để bắt đầu chia sẻ hoặc tìm chuyến đi.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="icon-box">
+                    <span class="icon">&#128269;</span>
+                    <h3>Chia Sẻ / Tìm Chuyến Đi</h3>
+                    <p>Dễ dàng chia sẻ chi tiết chuyến đi của bạn hoặc tìm kiếm chuyến đi có sẵn trong khu vực của bạn.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="icon-box">
+                    <span class="icon">&#128690;</span>
+                    <h3>Thưởng Thức Hành Trình</h3>
+                    <p>Đi cùng nhau, tiết kiệm chi phí và giúp giảm thiểu ùn tắc giao thông và ô nhiễm.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="featured-vehicles py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Phương tiện nổi bật</h2>
         <div class="row">
             @foreach (var bike in Model.Bikes)
             {
-                <div class="col-md-4 col-sm-12 mb-4">
-                    <div class="card">
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card h-100 shadow-sm">
                         <img src="@(!string.IsNullOrEmpty(bike.Img) ? bike.Img : defaultImage)" class="card-img-top"
                             alt="@bike.BikeName">
                         <div class="card-body">
                             <h5 class="card-title">@bike.BikeName</h5>
-                            <p class="card-text">Price: $@bike.Price</p>
-                            <p class="card-text">PricePerHour: $@bike.PricePerHour</p>
-                            <p class="card-text">Location: @bike.Location?.Name</p>
-                            <p class="card-text text-sm">Description: @bike.Description</p>
-                            <a class="btn btn-info" asp-controller="Vehicle" asp-action="Details"
-                                asp-route-id="@bike.Id">View
-                                Details</a>
+                            <p class="card-text"><strong>Giá:</strong> $@bike.Price</p>
+                            <p class="card-text"><strong>Giá/giờ:</strong> $@bike.PricePerHour</p>
+                            <p class="card-text"><strong>Địa điểm:</strong> @bike.Location?.Name</p>
+                            <p class="card-text text-muted">@(bike.Description.Length > 100 ? bike.Description.Substring(0,
+                            100) + "..." : bike.Description)</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <a class="btn btn-outline-primary btn-block" asp-controller="Vehicle" asp-action="Details"
+                                asp-route-id="@bike.Id">Xem chi tiết</a>
                         </div>
                     </div>
                 </div>
@@ -86,22 +95,27 @@
         </div>
     </div>
 </div>
-<div class="testimonials">
+
+<div class="testimonials py-5">
     <div class="container">
-        <h2>Khách hàng nói gì về chúng tôi</h2>
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="community-story">
-                    <h4>Hành Trình của Anh John</h4>
-                    <p>"Nhờ vào TransportShare, tôi tìm được chuyến đi đến chỗ làm mỗi ngày, tiết kiệm tiền và kết
-                        bạn mới trên đường đi."</p>
+        <h2 class="text-center mb-5">Khách hàng nói gì về chúng tôi</h2>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title">Hành Trình của Anh John</h4>
+                        <p class="card-text">"Nhờ vào TransportShare, tôi tìm được chuyến đi đến chỗ làm mỗi ngày, tiết
+                            kiệm tiền và kết bạn mới trên đường đi."</p>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="community-story">
-                    <h4>Trải Nghiệm của Chị Jane</h4>
-                    <p>"Chia sẻ xe của tôi với người khác đã là một trải nghiệm đáng nhớ. Tôi đã gặp gỡ những người
-                        tuyệt vời và giảm chi phí đi lại."</p>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title">Trải Nghiệm của Chị Jane</h4>
+                        <p class="card-text">"Chia sẻ xe của tôi với người khác đã là một trải nghiệm đáng nhớ. Tôi đã
+                            gặp gỡ những người tuyệt vời và giảm chi phí đi lại."</p>
+                    </div>
                 </div>
             </div>
         </div>

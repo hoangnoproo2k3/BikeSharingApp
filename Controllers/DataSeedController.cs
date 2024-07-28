@@ -16,13 +16,13 @@ namespace BikeSharingApp.Controllers
         public IActionResult SeedData()
         {
             // Các phương thức tạo dữ liệu sẽ được gọi ở đây
-            CreateRoles();
-            CreateUsers();
-            CreateLocations();
-            CreateBikes();
-            CreateBookings();
+            // CreateRoles();
+            // CreateUsers();
+            // CreateLocations();
+            // CreateBikes();
+            // CreateBookings();
             // CreateReviews();
-
+            CreateStatuses();
             return Content("Data seeded successfully");
         }
 
@@ -115,6 +115,27 @@ namespace BikeSharingApp.Controllers
             _context.Bikes.AddRange(bikes);
             _context.SaveChanges();
         }
+        private void CreateStatuses()
+        {
+            var statuses = new List<Status>
+            {
+                new Status
+                {
+                    Name = "Pending"
+                },
+                new Status
+                {
+                    Name = "Approved"
+                },
+                new Status
+                {
+                    Name = "Rejected"
+                }
+            };
+
+            _context.Statuses.AddRange(statuses);
+            _context.SaveChanges();
+        }
 
         private void CreateBookings()
         {
@@ -127,7 +148,7 @@ namespace BikeSharingApp.Controllers
                     StartDate = DateTime.Now.AddDays(1),
                     EndDate = DateTime.Now.AddDays(2),
                     TotalPrice = 24.00m,
-                    Status = "Confirmed"
+                    StatusId =1
                 }
             };
 
