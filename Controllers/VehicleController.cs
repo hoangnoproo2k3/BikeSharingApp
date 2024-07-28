@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using BikeSharingApp.Models;
 using System.Linq;
 using BikeSharingApp.Data;
+using BikeSharingApp.Utils;
 
 namespace BikeSharingApp.Controllers
 {
@@ -36,6 +37,28 @@ namespace BikeSharingApp.Controllers
 
             viewModel.Locations = _context.Locations.ToList();
 
+            return View(viewModel);
+        }
+        public IActionResult Details(int id)
+        {
+            var viewModel = new DetailBikeViewModel();
+
+            var bike = _context.Bikes.FirstOrDefault(b => b.Id == id);
+            if (bike == null)
+            {
+                return NotFound();
+            }
+            viewModel.Bike = bike;
+            viewModel.BikeName = bike.BikeName;
+            var user = HttpContext.Session.Get<User>("User");
+            if (user != null && bike.OwnerId == user.Id)
+            {
+                viewModel.Check = false;
+            }
+            else
+            {
+                viewModel.Check = true;
+            }
             return View(viewModel);
         }
     }

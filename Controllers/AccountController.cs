@@ -97,7 +97,8 @@ namespace BikeSharingApp.Controllers
             {
                 FullName = user.FullName,
                 Email = user.Email,
-                Phone = user.Phone
+                Phone = user.Phone,
+                Bikes = _context.Bikes.Where(b => b.OwnerId == user.Id).ToList()
             };
 
             return View(model);

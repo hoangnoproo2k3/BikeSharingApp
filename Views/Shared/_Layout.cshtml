@@ -41,21 +41,32 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav">
-                        <li class="nav-item mr-4">
-                            <a class="btn btn-primary " asp-controller="Bikes" asp-action="Create">Create New
+                        <li class="nav-item mx-3">
+                            <a class="btn btn-primary  mr-4" asp-controller="Bikes" asp-action="Create">Create New
                                 Bike</a>
                         </li>
                         @if (Context.Session.Get<User>("User") != null)
                         {
                             var user = Context.Session.Get<User>("User");
                             var emailName = user.Email.Split('@')[0];
-                            <li class="nav-item d-flex align-items-center">
-                                <a class="navbar-text me-2" asp-controller="Account" asp-action="Profile">Welcome,
-                                    @user.FullName</a>
-                                <form asp-controller="Account" asp-action="Logout" method="post" class="nav-link mb-0">
-                                    <button type="submit" class="btn btn-link">Logout</button>
-                                </form>
-                            </li>
+                            <div class="dropdown navbar-text me-2">
+                                <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Welcome, @user.FullName
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profile</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="nav-link mb-0">
+                                        <button type="submit" class="btn btn-link text-decoration-none">Logout</button>
+                                    </form>
+                                </ul>
+                            </div>
+
                         }
                         else
                         {

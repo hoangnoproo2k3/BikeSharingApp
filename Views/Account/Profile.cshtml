@@ -1,9 +1,10 @@
 @model BikeSharingApp.Models.ProfileViewModel
 @{
     ViewData["Title"] = "Profile";
+    var defaultImage = "/images/xemau.jpg";
 }
 
-<h1>Profile</h1>
+<h2>Cập nhật tài khoản</h2>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -28,5 +29,28 @@
         <input asp-for="Phone" class="form-control" />
         <span asp-validation-for="Phone" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Update Profile</button>
+    <button type="submit" class="btn btn-primary my-4">Update Profile</button>
 </form>
+
+<h2>Danh sách phương tiện bạn đã tạo</h2>
+
+<div class="row my-4">
+    @foreach (var bike in Model.Bikes)
+    {
+        <div class="col-md-4 col-sm-12 mb-4">
+            <div class="card">
+                <img src="@(!string.IsNullOrEmpty(bike.Img) ? bike.Img : defaultImage)" class="card-img-top"
+                    alt="@bike.BikeName">
+                <div class="card-body">
+                    <h5 class="card-title">@bike.BikeName</h5>
+                    <p class="card-text">Price: $@bike.Price</p>
+                    <p class="card-text">PricePerHour: $@bike.PricePerHour</p>
+                    <p class="card-text">Location: @bike.Location?.Name</p>
+                    <p class="card-text text-sm">Description: @bike.Description</p>
+                    <a class="btn btn-info" asp-controller="Vehicle" asp-action="Details" asp-route-id="@bike.Id">View
+                        Details</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

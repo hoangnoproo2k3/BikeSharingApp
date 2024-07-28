@@ -82,7 +82,7 @@ namespace BikeSharingApp.Controllers
 
                 await _repository.AddBikeAsync(bike);
                 TempData["SuccessMessage"] = "Bike created successfully.";
-                return RedirectToAction("ListBikes");
+                return RedirectToAction("Profile", "Account");
             }
             catch (Exception ex)
             {
@@ -144,7 +144,6 @@ namespace BikeSharingApp.Controllers
             return View("Create", model);  // Sử dụng lại view Create cho chức năng Edit
         }
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> Edit(CreateBikeViewModel model)
         {
             var user = HttpContext.Session.Get<User>("User");
@@ -173,13 +172,13 @@ namespace BikeSharingApp.Controllers
                 }
                 else
                 {
-                    bike.Img = model.ExistingImg; // Keep the existing image if no new image is uploaded
+                    bike.Img = model.ExistingImg;
                 }
 
                 await _repository.UpdateBikeAsync(bike);
 
                 TempData["SuccessMessage"] = "Bike updated successfully.";
-                return RedirectToAction("ListBikes");
+                return RedirectToAction("Profile", "Account");
             }
             catch (Exception ex)
             {
