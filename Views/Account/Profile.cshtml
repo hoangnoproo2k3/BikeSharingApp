@@ -3,6 +3,25 @@
     ViewData["Title"] = "Profile";
     var defaultImage = "/images/xemau.jpg";
 }
+<style>
+    .badge-pending {
+        background-color: #ffc107;
+        /* Màu vàng */
+        color: #fff;
+    }
+
+    .badge-approved {
+        background-color: #28a745;
+        /* Màu xanh lá cây */
+        color: #fff;
+    }
+
+    .badge-rejected {
+        background-color: #dc3545;
+        /* Màu đỏ */
+        color: #fff;
+    }
+</style>
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-4">
@@ -80,21 +99,28 @@
         <div class="col-12">
             <h2 class="mb-4">Phương tiện bạn đã đặt</h2>
             <div class="row">
-                @foreach (var bike in Model.ReservedBikes)
+                @foreach (var booking in Model.ReservedBookingBikes)
                 {
                     <div class="col-md-4 mb-4">
                         <div class="card h-100 shadow-sm">
-                            <img src="@(!string.IsNullOrEmpty(bike.Bike.Img) ? bike.Bike.Img : defaultImage)"
-                                class="card-img-top" alt="@bike.Bike.BikeName">
+                            <img src="@(!string.IsNullOrEmpty(booking.Bike.Img) ? booking.Bike.Img : defaultImage)"
+                                class="card-img-top" alt="@booking.Bike.BikeName">
                             <div class="card-body">
-                                <h5 class="card-title">@bike.Bike.BikeName</h5>
-                                <p class="card-text"><strong>Tổng giá:</strong> $@bike.Booking.TotalPrice</p>
-                                <p class="card-text"><strong>Trạng thái:</strong> <span
-                                        class="badge bg-primary">@bike.Status.Name</span></p>
+                                <h5 class="card-title">@booking.Bike.BikeName</h5>
+                                <p class="card-text"><strong>Tổng giá:</strong> $@booking.TotalPrice</p>
+                                <p class="card-text">
+                                    <strong>Status:</strong>
+                                    <span class="badge 
+                                    @(booking.Status.Id == 1 ? "badge-pending" : 
+                                    booking.Status.Id ==2 ? "badge-approved" : 
+                                    booking.Status.Id == 3 ? "badge-rejected" : "badge-secondary")">
+                                        @booking.Status.Name
+                                    </span>
+                                </p>
                             </div>
                             <div class="card-footer bg-transparent border-top-0">
                                 <a class="btn btn-outline-primary w-100" asp-controller="Vehicle" asp-action="Details"
-                                    asp-route-id="@bike.Bike.Id">Xem chi tiết</a>
+                                    asp-route-id="@booking.Bike.Id">Xem chi tiết</a>
                             </div>
                         </div>
                     </div>

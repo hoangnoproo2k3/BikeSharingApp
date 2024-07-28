@@ -20,9 +20,9 @@ namespace BikeSharingApp.Controllers
             // CreateUsers();
             // CreateLocations();
             // CreateBikes();
-            // CreateBookings();
+            CreateBookings();
             // CreateReviews();
-            CreateStatuses();
+            // CreateStatuses();
             return Content("Data seeded successfully");
         }
 

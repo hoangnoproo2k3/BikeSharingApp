@@ -95,32 +95,19 @@ namespace BikeSharingApp.Controllers
             // Lấy danh sách xe đã tạo bởi người dùng
             var createdBikes = _context.Bikes.Where(b => b.OwnerId == user.Id).ToList();
             var locations = _context.Locations.ToList();
+            var statuses = _context.Statuses.ToList();
+            var bikes = _context.Bikes.ToList();
 
             // Lấy danh sách xe đã đặt bởi người dùng thông qua Booking
-            // var reservedBikeIds = _context.Bookings
-            //                                 .Where(b => b.CustomerId == user.Id)
-            //                                 .Select(b => b.BikeId)
-            //                                 .ToList();
-            // var reservedBikes = _context.Bikes
-            //                             .Where(b => reservedBikeIds.Contains(b.Id))
-            //                             .ToList();
-            var reservedBikes = (from booking in _context.Bookings
-                                 join bike in _context.Bikes on booking.BikeId equals bike.Id
-                                 join status in _context.Statuses on booking.StatusId equals status.Id
-                                 where booking.CustomerId == user.Id
-                                 select new ReservedBikesModel
-                                 {
-                                     Bike = bike,
-                                     Booking = booking,
-                                     Status = status
-                                 }).ToList();
+            var ReservedBookingBikes = _context.Bookings.Where(b => b.CustomerId == user.Id).ToList();
+
             var model = new ProfileViewModel
             {
                 FullName = user.FullName,
                 Email = user.Email,
                 Phone = user.Phone,
                 CreatedBikes = createdBikes,
-                ReservedBikes = reservedBikes
+                ReservedBookingBikes = ReservedBookingBikes
             };
 
             return View(model);
@@ -147,7 +134,6 @@ namespace BikeSharingApp.Controllers
 
                 // Cập nhật thông tin người dùng trong session
                 HttpContext.Session.Set("User", userToUpdate);
-
                 TempData["SuccessMessage"] = "Profile updated successfully.";
                 return RedirectToAction("Profile");
             }

@@ -83,6 +83,12 @@ namespace BikeSharingApp.Controllers
         [HttpPost]
         public IActionResult Book(BookingViewModel model)
         {
+            var user = HttpContext.Session.Get<User>("User");
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var bike = _context.Bikes.Find(model.Bike.Id);
             if (bike == null)
             {
@@ -104,7 +110,17 @@ namespace BikeSharingApp.Controllers
             {
                 totalPrice = totalDaysDecimal * bike.Price;
             }
+            // Kiểm tra xem có booking nào đang chờ xử lý cho cùng một xe và khách hàng không
+            var existingBooking = _context.Bookings
+                .FirstOrDefault(b => b.BikeId == model.Bike.Id && b.CustomerId == user.Id && b.StatusId == 1);
 
+            if (existingBooking != null)
+            {
+                // Thông báo lỗi hoặc thông báo khác
+                TempData["ErrorMessage"] = "Bạn đã có một booking đang chờ xử lý cho xe này.";
+                model.Bike = bike;
+                return View("Book", model);
+            }
             var booking = new Booking
             {
                 CustomerId = HttpContext.Session.Get<User>("User")?.Id,
