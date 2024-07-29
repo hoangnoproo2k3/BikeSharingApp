@@ -61,6 +61,20 @@ namespace BikeSharingApp.Controllers
             }
             return View(viewModel);
         }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var bike = await _context.Bikes.FindAsync(id);
+            if (bike == null)
+            {
+                return NotFound();
+            }
+
+            _context.Bikes.Remove(bike);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Management_Post", "Account");
+        }
         [HttpGet]
         public IActionResult Book(int? id)
         {

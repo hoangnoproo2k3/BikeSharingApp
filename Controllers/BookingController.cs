@@ -25,7 +25,7 @@ namespace BikeSharingApp.Controllers
             }
 
             // Lấy danh sách các xe do người dùng tạo
-            var createdBikes = _context.Bikes.Where(b => b.OwnerId == userId).ToList();
+            var createdBikes = _context.Bikes.Where(b => b.OwnerId == userId).OrderByDescending(b => b.Id).ToList();
             var locations = _context.Locations.ToList();
             var viewModel = new PendingBookingsViewModel();
 

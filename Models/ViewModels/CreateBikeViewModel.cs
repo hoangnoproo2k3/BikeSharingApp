@@ -18,7 +18,7 @@ namespace BikeSharingApp.Models
         [DataType(DataType.Currency)]
         [Display(Name = "Price")]
         public decimal Price { get; set; }
-
+        [Required(ErrorMessage = "Description is required.")]
         [Display(Name = "Description")]
         [StringLength(500, ErrorMessage = "Description cannot be longer than 500 characters.")]
         public string? Description { get; set; }

@@ -21,11 +21,12 @@ public class HomeController : Controller
         var users = _context.Users.ToList();
         var bikes = _context.Bikes.ToList();
         var locations = _context.Locations.ToList();
-
+        var random = new Random();
+        var randomBikes = bikes.OrderBy(b => random.Next()).Take(9).ToList();
         var viewModel = new MultipleListsViewModel
         {
             Users = users,
-            Bikes = bikes,
+            Bikes = randomBikes,
             Locations = locations
         };
 

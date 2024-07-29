@@ -81,8 +81,7 @@ namespace BikeSharingApp.Controllers
                 }
 
                 await _repository.AddBikeAsync(bike);
-                TempData["SuccessMessage"] = "Bike created successfully.";
-                return RedirectToAction("Profile", "Account");
+                return RedirectToAction("Management_Post", "Account");
             }
             catch (Exception ex)
             {
@@ -177,8 +176,7 @@ namespace BikeSharingApp.Controllers
 
                 await _repository.UpdateBikeAsync(bike);
 
-                TempData["SuccessMessage"] = "Bike updated successfully.";
-                return RedirectToAction("Profile", "Account");
+                return RedirectToAction("Management_Post", "Account");
             }
             catch (Exception ex)
             {

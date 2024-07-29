@@ -117,7 +117,7 @@ namespace BikeSharingApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
             // Lấy danh sách xe đã tạo bởi người dùng
-            var createdBikes = _context.Bikes.Where(b => b.OwnerId == user.Id).ToList();
+            var createdBikes = _context.Bikes.Where(b => b.OwnerId == user.Id).OrderByDescending(b => b.Id).ToList();
             var locations = _context.Locations.ToList();
 
             var model = new ProfileViewModel

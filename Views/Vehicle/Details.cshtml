@@ -1,69 +1,91 @@
 @model BikeSharingApp.Models.DetailBikeViewModel
 
 @{
-    ViewData["Title"] = $"{Model.BikeName} - Bike Details";
+    ViewData["Title"] = $"{Model.BikeName} - Thông tin chi tiết";
 }
+
 <style>
-    .image-container {
+    .bike-details {
+        background-color: #f8f9fa;
+        border-radius: 15px;
         overflow: hidden;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-lg {
+    .bike-image {
+        height: 500px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .detail-section {
+        padding: 2rem;
+    }
+
+    .price-tag {
+        background-color: #28a745;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-weight: bold;
+    }
+
+    .btn-action {
         padding: 0.75rem 1.5rem;
-        font-size: 1.1rem;
+        font-size: 1rem;
+        border-radius: 50px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 </style>
-<div class="container my-5">
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="image-container">
-                <img src="@Model.Bike.Img" alt="@Model.Bike.BikeName" class="img-fluid rounded shadow-sm"
-                    style="width: 100%; height: 400px; object-fit: cover;">
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <h1 class="mb-3 text-primary">@Model.Bike.BikeName</h1>
-            <div class="bg-light p-4 rounded shadow-sm mb-4">
-                <div class="row">
-                    <div class="col-6 mb-3">
-                        <h5 class="text-muted">Price</h5>
-                        <p class="h4">$@Model.Bike.Price</p>
-                    </div>
-                    <div class="col-6 mb-3">
-                        <h5 class="text-muted">Price Per Hour</h5>
-                        <p class="h4">$@Model.Bike.PricePerHour</p>
-                    </div>
-                    <div class="col-12 mb-3">
-                        <h5 class="text-muted">Location</h5>
-                        <p class="h5">@(Model.Bike.Location?.Name ?? "N/A")</p>
-                    </div>
-                </div>
-            </div>
-            <h5 class="mb-3 text-muted">Description</h5>
-            <p class="lead mb-4">@Model.Bike.Description</p>
-            <div class="d-flex justify-content-between">
-                @if (!Model.Check)
-                {
-                    <a asp-controller="Bikes" asp-action="Edit" asp-route-id="@Model.Bike.Id"
-                        class="btn btn-primary btn-lg">
-                        <i class="fas fa-edit me-2"></i>Edit
-                    </a>
-                    <a class="btn btn-outline-secondary btn-lg" asp-controller="Account" asp-action="Profile">
-                        <i class="fas fa-arrow-left me-2"></i>Back to List
-                    </a>
-                }
-                else
-                {
-                    <a asp-action="Book" asp-route-id="@Model.Bike.Id" class="btn btn-success btn-lg">
-                        <i class="fas fa-book me-2"></i>Book Now
-                    </a>
-                    <a class="btn btn-outline-secondary btn-lg" asp-controller="Vehicle" asp-action="Search">
-                        <i class="fas fa-arrow-left me-2"></i>Back to List
-                    </a>
-                }
 
+<div class="container my-5">
+    <div class="bike-details">
+        <div class="row g-0">
+            <div class="col-lg-6">
+                <img src="@Model.Bike.Img" alt="@Model.Bike.BikeName" class="bike-image">
+            </div>
+            <div class="col-lg-6 detail-section">
+                <h1 class="mb-4 text-primary">@Model.Bike.BikeName</h1>
+
+                <div class="mb-4">
+                    <span class="price-tag me-3">$@Model.Bike.Price/Ngày</span>
+                    <span class="text-muted">$@Model.Bike.PricePerHour/giờ</span>
+                </div>
+
+                <h5 class="mb-2 text-secondary">Vị trí</h5>
+                <p class="mb-4 fs-5">@(Model.Bike.Location?.Name ?? "Chưa có thông tin")</p>
+
+                <h5 class="mb-2 text-secondary">Mô tả</h5>
+                <p class="mb-4">@Model.Bike.Description</p>
+
+                <div class="d-flex justify-content-between align-items-center">
+                    @if (!Model.Check)
+                    {
+                        <a asp-controller="Bikes" asp-action="Edit" asp-route-id="@Model.Bike.Id"
+                            class="btn btn-primary btn-action">
+                            <i class="fas fa-edit me-2"></i>Chỉnh sửa
+                        </a>
+                        <a class="btn btn-outline-secondary btn-action" asp-controller="Account" asp-action="Profile">
+                            <i class="fas fa-arrow-left me-2"></i>Quay lại
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Book" asp-route-id="@Model.Bike.Id" class="btn btn-success btn-action">
+                            <i class="fas fa-book me-2"></i>Đặt ngay
+                        </a>
+                        <a class="btn btn-outline-secondary btn-action" asp-controller="Vehicle" asp-action="Search">
+                            <i class="fas fa-arrow-left me-2"></i>Quay lại
+                        </a>
+                    }
+                </div>
             </div>
         </div>
     </div>

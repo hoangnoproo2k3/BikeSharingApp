@@ -3,7 +3,6 @@
     ViewData["Title"] = "Yêu Cầu Phê Duyệt";
     int? selectedBikeId = ViewData["SelectedBikeId"] as int?;
 }
-
 <div class="search-box py-5 bg-light">
     <div class="container">
         <h2 class="text-center mb-4">Lọc theo bài đăng</h2>
@@ -58,6 +57,10 @@
                         {
                             <a class="btn btn-success" asp-action="Approve" asp-route-id="@item.Booking.Id">Approve</a>
                             <a class="btn btn-danger" asp-action="Reject" asp-route-id="@item.Booking.Id">Reject</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Request processed</span>
                         }
                     </td>
                 </tr>

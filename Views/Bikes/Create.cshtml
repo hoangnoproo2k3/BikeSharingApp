@@ -1,64 +1,77 @@
 @model BikeSharingApp.Models.CreateBikeViewModel
 
 @{
-    ViewData["Title"] = Model.Id == 0 ? "Create Bike" : "Edit Bike";
+    ViewData["Title"] = Model.Id == 0 ? "Thêm xe đạp mới" : "Chỉnh sửa thông tin xe đạp";
 }
 
-<div class="container">
-    <h1>@ViewData["Title"]</h1>
+<div class="container mt-5">
+    <h1 class="mb-4 text-primary">@ViewData["Title"]</h1>
 
-    <form asp-action="@((Model.Id == 0) ? "Create" : "Edit")" method="post" enctype="multipart/form-data">
+    <form asp-action="@((Model.Id == 0) ? "Create" : "Edit")" method="post" enctype="multipart/form-data"
+        class="bg-light p-4 rounded shadow-sm">
         <input type="hidden" asp-for="Id" />
 
-        <div class="form-group">
-            <label asp-for="BikeName" class="control-label"></label>
-            <input asp-for="BikeName" class="form-control" />
-            <span asp-validation-for="BikeName" class="text-danger"></span>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="BikeName" class="form-label fw-bold">Tên xe đạp</label>
+                <input asp-for="BikeName" class="form-control" placeholder="Nhập tên xe đạp" />
+                <span asp-validation-for="BikeName" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Price" class="form-label fw-bold">Giá bán</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="Price" class="form-control" type="number" step="0.01" placeholder="0.00" />
+                </div>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label asp-for="Price" class="control-label"></label>
-            <input asp-for="Price" class="form-control" type="number" step="0.01" />
-            <span asp-validation-for="Price" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="Description" class="control-label"></label>
-            <textarea asp-for="Description" class="form-control"></textarea>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label fw-bold">Mô tả</label>
+            <textarea asp-for="Description" class="form-control" rows="4"
+                placeholder="Mô tả chi tiết về xe đạp"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
-        <div class="form-group">
-            <label asp-for="Img" class="control-label"></label>
-            <input asp-for="Img" type="file" class="form-control" />
+        <div class="mb-3">
+            <label asp-for="Img" class="form-label fw-bold">Hình ảnh</label>
+            <input asp-for="Img" type="file" class="form-control" accept="image/*" />
             <span asp-validation-for="Img" class="text-danger"></span>
 
             @if (Model.ExistingImg != null)
             {
-                <div>
-                    <img src="@Model.ExistingImg" alt="Bike Image" style="max-width: 200px;" />
+                <div class="mt-2">
+                    <img src="@Model.ExistingImg" alt="Hình ảnh xe đạp" class="img-thumbnail" style="max-width: 200px;" />
                     <input type="hidden" asp-for="ExistingImg" value="@Model.ExistingImg" />
                 </div>
             }
         </div>
 
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="LocationId" class="form-label fw-bold">Vị trí</label>
+                <select asp-for="LocationId" asp-items="Model.Locations" class="form-select">
+                    <option value="">Chọn vị trí</option>
+                </select>
+                <span asp-validation-for="LocationId" class="text-danger"></span>
+            </div>
 
-        <div class="form-group">
-            <label asp-for="LocationId" class="control-label"></label>
-            <select asp-for="LocationId" asp-items="Model.Locations" class="form-control">
-                <option value="">Select Location</option>
-            </select>
-            <span asp-validation-for="LocationId" class="text-danger"></span>
+            <div class="col-md-6 mb-3">
+                <label asp-for="PricePerHour" class="form-label fw-bold">Giá thuê theo giờ</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="PricePerHour" class="form-control" type="number" step="0.01" placeholder="0.00" />
+                </div>
+                <span asp-validation-for="PricePerHour" class="text-danger"></span>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label asp-for="PricePerHour" class="control-label"></label>
-            <input asp-for="PricePerHour" class="form-control" type="number" step="0.01" />
-            <span asp-validation-for="PricePerHour" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">@((Model.Id == 0) ? "Create" : "Save")</button>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-5">
+                @((Model.Id == 0) ? "Thêm mới" : "Lưu thay đổi")
+            </button>
         </div>
     </form>
 </div>

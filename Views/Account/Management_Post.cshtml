@@ -26,8 +26,6 @@
 
     .action-icons {
         font-size: 1.5em;
-        display: flex;
-        gap: 10px;
     }
 
     .action-icons a {
@@ -53,8 +51,8 @@
                         <th>Giá/giờ</th>
                         <th>Địa điểm</th>
                         <th>Mô tả</th>
-                        <th>Phê duyệt</th>
                         <th>Thao tác</th>
+                        <th>Phê duyệt</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,18 +68,18 @@
                             <td>$@bike.PricePerHour</td>
                             <td>@bike.Location?.Name</td>
                             <td>@bike.Description</td>
+                            <td class="action-icons">
+                                <a asp-controller="Bikes" asp-action="Edit" asp-route-id="@bike.Id" title="Sửa">&#9998;</a>
+                                <form asp-controller="Vehicle" asp-action="Delete" method="post" class="d-inline"
+                                    onsubmit="return confirmDelete();">
+                                    <input type="hidden" name="id" value="@bike.Id" />
+                                    <button type="submit" title="Xóa"
+                                        style="border:none; background:none; padding:0; margin:0; color:red; cursor:pointer;">&#10060;</button>
+                                </form>
+                            </td>
                             <td>
                                 <a class="btn btn-outline-primary" asp-controller="Booking" asp-action="Pending"
                                     asp-route-id="@bike.Id" asp-route-bikeId="@bike.Id">Yêu cầu</a>
-                            </td>
-
-                            <td class="action-icons">
-                                <a asp-controller="Vehicle" asp-action="Edit" asp-route-id="@bike.Id"
-                                    title="Sửa">&#9998;</a>
-                                <a asp-controller="Vehicle" asp-action="Delete" asp-route-id="@bike.Id"
-                                    title="Xóa">&#10060;</a>
-                                <a asp-controller="Vehicle" asp-action="Approve" asp-route-id="@bike.Id"
-                                    title="Phê duyệt">&#10004;</a>
                             </td>
                         </tr>
                     }
@@ -90,3 +88,10 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            return confirm("Bạn có chắc chắn muốn xóa mục này?");
+        }
+    </script>
+}
