@@ -17,9 +17,6 @@
             height: 200px;
             object-fit: cover;
         }
-    </style>
-
-    <style>
         body {
             background-color: #f8f9fa;
         }
@@ -48,6 +45,21 @@
         .badge {
             font-size: 0.8em;
             padding: 0.5em 0.7em;
+        }
+
+        .badge-pending {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .badge-approved {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .badge-rejected {
+            background-color: #dc3545;
+            color: #fff;
         }
     </style>
 </head>
@@ -81,35 +93,46 @@
                         {
                             var user = Context.Session.Get<User>("User");
                             var emailName = user.Email.Split('@')[0];
-                            <div class="dropdown navbar-text me-2">
-                                <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    Welcome, @user.FullName
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profile</a>
-                                    </li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <form asp-controller="Account" asp-action="Logout" method="post" class="nav-link mb-0">
-                                        <button type="submit" class="btn btn-link text-decoration-none">Logout</button>
-                                    </form>
-                                </ul>
-                            </div>
+                                <div class="dropdown navbar-text me-2">
+                                    <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="dropdownMenuLink"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Welcome, @user.FullName
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="Profile">Trang cá
+                                                nhân</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="Management_Post">Quản
+                                                lý
+                                                bài
+                                                đăng</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Booking" asp-action="Pending">Yêu cầu phê
+                                                duyệt</a>
+                                        </li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="nav-link mb-0">
+                                            <button type="submit" class="btn btn-link text-decoration-none">Logout</button>
+                                        </form>
+                                    </ul>
+                                </div>
 
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account"
-                                    asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account"
-                                    asp-action="Register">Register</a>
-                            </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account"
+                                        asp-action="Login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account"
+                                        asp-action="Register">Register</a>
+                                </li>
                         }
                     </ul>
                 </div>

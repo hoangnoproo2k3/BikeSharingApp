@@ -1,26 +1,10 @@
 @model BikeSharingApp.Models.ProfileViewModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Trang cá nhân";
     var defaultImage = "/images/xemau.jpg";
 }
 <style>
-    .badge-pending {
-        background-color: #ffc107;
-        /* Màu vàng */
-        color: #fff;
-    }
-
-    .badge-approved {
-        background-color: #28a745;
-        /* Màu xanh lá cây */
-        color: #fff;
-    }
-
-    .badge-rejected {
-        background-color: #dc3545;
-        /* Màu đỏ */
-        color: #fff;
-    }
+    
 </style>
 <div class="container py-5">
     <div class="row">
@@ -66,35 +50,6 @@
             </div>
         </div>
     </div>
-
-    <div class="row mt-5">
-        <div class="col-12">
-            <h2 class="mb-4">Phương tiện của bạn</h2>
-            <div class="row">
-                @foreach (var bike in Model.CreatedBikes)
-                {
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100 shadow-sm">
-                            <img src="@(!string.IsNullOrEmpty(bike.Img) ? bike.Img : defaultImage)" class="card-img-top"
-                                alt="@bike.BikeName">
-                            <div class="card-body">
-                                <h5 class="card-title">@bike.BikeName</h5>
-                                <p class="card-text"><strong>Giá:</strong> $@bike.Price</p>
-                                <p class="card-text"><strong>Giá/giờ:</strong> $@bike.PricePerHour</p>
-                                <p class="card-text"><strong>Địa điểm:</strong> @bike.Location?.Name</p>
-                                <p class="card-text text-muted">@bike.Description</p>
-                            </div>
-                            <div class="card-footer bg-transparent border-top-0">
-                                <a class="btn btn-outline-primary w-100" asp-controller="Vehicle" asp-action="Details"
-                                    asp-route-id="@bike.Id">Xem chi tiết</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-
     <div class="row mt-5">
         <div class="col-12">
             <h2 class="mb-4">Phương tiện bạn đã đặt</h2>

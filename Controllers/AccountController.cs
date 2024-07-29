@@ -92,9 +92,6 @@ namespace BikeSharingApp.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            // Lấy danh sách xe đã tạo bởi người dùng
-            var createdBikes = _context.Bikes.Where(b => b.OwnerId == user.Id).ToList();
-            var locations = _context.Locations.ToList();
             var statuses = _context.Statuses.ToList();
             var bikes = _context.Bikes.ToList();
 
@@ -106,13 +103,30 @@ namespace BikeSharingApp.Controllers
                 FullName = user.FullName,
                 Email = user.Email,
                 Phone = user.Phone,
-                CreatedBikes = createdBikes,
                 ReservedBookingBikes = ReservedBookingBikes
             };
 
             return View(model);
         }
+        [HttpGet]
+        public IActionResult Management_Post()
+        {
+            var user = HttpContext.Session.Get<User>("User");
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            // Lấy danh sách xe đã tạo bởi người dùng
+            var createdBikes = _context.Bikes.Where(b => b.OwnerId == user.Id).ToList();
+            var locations = _context.Locations.ToList();
 
+            var model = new ProfileViewModel
+            {
+                CreatedBikes = createdBikes,
+            };
+
+            return View(model);
+        }
         [HttpPost]
         public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
         {

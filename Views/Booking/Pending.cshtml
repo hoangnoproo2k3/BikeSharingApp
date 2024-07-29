@@ -1,0 +1,73 @@
+@model BikeSharingApp.Models.PendingBookingsViewModel
+@{
+    ViewData["Title"] = "Yêu Cầu Phê Duyệt";
+    int? selectedBikeId = ViewData["SelectedBikeId"] as int?;
+}
+
+<div class="search-box py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Lọc theo bài đăng</h2>
+        <form asp-controller="Booking" asp-action="Pending" method="get">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <select name="bikeId" class="form-control form-control-lg">
+                        <option value="">Tất cả</option>
+                        @foreach (var bike in Model.CreatedBikes)
+                        {
+                            <option value="@bike.Id">@bike.BikeName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Tìm kiếm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@if (!string.IsNullOrEmpty(Model.BikeName))
+{
+    <h2>Danh Sách Yêu Cầu Phê Duyệt Của @Model.BikeName</h2>
+}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Bike Name</th>
+            <th>Customer</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.PendingBookings.Any())
+        {
+            @foreach (var item in Model.PendingBookings)
+            {
+                <tr>
+                    <td>@item.Bike.BikeName</td>
+                    <td>@item.Customer.FullName</td>
+                    <td>
+                        <span class="badge @(item.Status.Id  == 1 ? "badge-pending" : 
+                            item.Status.Id  == 2 ? "badge-approved" : 
+                            item.Status.Id  == 3 ? "badge-rejected" : "badge-secondary")">
+                            @item.Status.Name
+                        </span>
+                    </td>
+                    <td>
+                        @if (item.Status.Name == "Pending")
+                        {
+                            <a class="btn btn-success" asp-action="Approve" asp-route-id="@item.Booking.Id">Approve</a>
+                            <a class="btn btn-danger" asp-action="Reject" asp-route-id="@item.Booking.Id">Reject</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="text-center">Không có yêu cầu phê duyệt nào.</td>
+            </tr>
+        }
+    </tbody>
+</table>
