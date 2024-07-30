@@ -34,8 +34,8 @@
                     alt="@bike.BikeName">
                 <div class="card-body">
                     <h5 class="card-title">@bike.BikeName</h5>
-                    <p class="card-text">Price: $@bike.Price</p>
-                    <p class="card-text">PricePerHour: $@bike.PricePerHour</p>
+                    <p class="card-text">Price: @bike.Price đ</p>
+                    <p class="card-text">PricePerHour: @bike.PricePerHour đ</p>
                     <p class="card-text">Location: @bike.Location?.Name</p>
                     <p class="card-text text-sm">Description: @bike.Description</p>
                     <a class="btn btn-info" asp-controller="Vehicle" asp-action="Details" asp-route-id="@bike.Id">View

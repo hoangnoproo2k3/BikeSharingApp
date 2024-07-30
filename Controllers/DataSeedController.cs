@@ -16,13 +16,13 @@ namespace BikeSharingApp.Controllers
         public IActionResult SeedData()
         {
             // Các phương thức tạo dữ liệu sẽ được gọi ở đây
-            // CreateRoles();
+            CreateRoles();
             // CreateUsers();
-            // CreateLocations();
+            CreateLocations();
             // CreateBikes();
-            CreateBookings();
+            // CreateBookings();
             // CreateReviews();
-            // CreateStatuses();
+            CreateStatuses();
             return Content("Data seeded successfully");
         }
 
@@ -72,21 +72,40 @@ namespace BikeSharingApp.Controllers
             {
                 new Location
                 {
-                    Name = "City Center",
-                    Address = "123 Main St, City",
-                    Coordinates = "40.7128,-74.0060"
+                    Name = "Công viên Thống Nhất",
+                    Address = "Tôn Thất Tùng, Đống Đa, Hà Nội",
+                    Coordinates = "21.0081,105.5204"
                 },
                 new Location
                 {
-                    Name = "Suburb Station",
-                    Address = "456 Park Ave, Suburb",
-                    Coordinates = "40.7282,-73.7949"
+                    Name = "Công viên Hoàn Kiếm",
+                    Address = "Hồ Hoàn Kiếm, Hoàn Kiếm, Hà Nội",
+                    Coordinates = "21.0285,105.8542"
+                },
+                new Location
+                {
+                    Name = "Công viên Cầu Giấy",
+                    Address = "Cầu Giấy, Hà Nội",
+                    Coordinates = "21.0291,105.7795"
+                },
+                new Location
+                {
+                    Name = "Công viên Yên Sở",
+                    Address = "Yên Sở, Hoàng Mai, Hà Nội",
+                    Coordinates = "20.9915,105.8235"
+                },
+                new Location
+                {
+                    Name = "Công viên Bắc Linh Đàm",
+                    Address = "Linh Đàm, Hoàng Mai, Hà Nội",
+                    Coordinates = "20.9955,105.8177"
                 }
             };
 
             _context.Locations.AddRange(locations);
             _context.SaveChanges();
         }
+
 
         private void CreateBikes()
         {

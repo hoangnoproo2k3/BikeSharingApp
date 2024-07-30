@@ -117,7 +117,7 @@
             <p>Giá Theo Ngày: <span id="pricePerDay" class="font-weight-bold">@Model.Bike.Price</span></p>
             <div class="mb-3">
                 <h5 class="text-muted">Tổng Tiền Thanh Toán</h5>
-                <p class="total-price" id="totalPrice">$0.00</p>
+                <p class="total-price" id="totalPrice">0.00</p>
             </div>
             <input type="hidden" asp-for="@Model.Bike.Id" value="@Model.Bike.Id" />
             <button type="submit" class="btn btn-primary">Đặt Ngay</button>
@@ -146,7 +146,7 @@
                 const endDate = new Date(endDateInput.value);
 
                 if (!startDate || !endDate || startDate >= endDate) {
-                    totalPriceElem.textContent = '$0.00';
+                    totalPriceElem.textContent = '0.00';
                     return;
                 }
 
@@ -163,7 +163,7 @@
                     totalPrice = daysDifference * pricePerDay;
                 }
 
-                totalPriceElem.textContent = `$${totalPrice.toFixed(2)}`;
+                totalPriceElem.textContent = `${totalPrice.toFixed(2)}`;
             }
 
             startDateInput.addEventListener('change', calculatePrice);

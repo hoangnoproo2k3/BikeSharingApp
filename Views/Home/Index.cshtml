@@ -79,8 +79,8 @@
                             alt="@bike.BikeName">
                         <div class="card-body">
                             <h5 class="card-title">@bike.BikeName</h5>
-                            <p class="card-text"><strong>Giá:</strong> $@bike.Price</p>
-                            <p class="card-text"><strong>Giá/giờ:</strong> $@bike.PricePerHour</p>
+                            <p class="card-text"><strong>Giá:</strong> @bike.Price đ</p>
+                            <p class="card-text"><strong>Giá/giờ:</strong> @bike.PricePerHour đ</p>
                             <p class="card-text"><strong>Địa điểm:</strong> @bike.Location?.Name</p>
                             <p class="card-text text-muted">@(bike.Description.Length > 100 ? bike.Description.Substring(0,
                             100) + "..." : bike.Description)</p>
