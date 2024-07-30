@@ -1,34 +1,26 @@
 @model BikeSharingApp.Models.PendingBookingsViewModel
-@{
-    ViewData["Title"] = "Yêu Cầu Phê Duyệt";
-    int? selectedBikeId = ViewData["SelectedBikeId"] as int?;
-}
+
 <div class="search-box py-5 bg-light">
     <div class="container">
         <h2 class="text-center mb-4">Lọc theo bài đăng</h2>
-        <form asp-controller="Booking" asp-action="Pending" method="get">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <select name="bikeId" class="form-control form-control-lg">
-                        <option value="">Tất cả</option>
-                        @foreach (var bike in Model.CreatedBikes)
-                        {
-                            <option value="@bike.Id">@bike.BikeName</option>
-                        }
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Tìm kiếm</button>
-                </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <select id="bikeSelect" name="bikeId" class="form-control form-control-lg">
+                    <option value="">Tất cả</option>
+                    @foreach (var bike in Model.CreatedBikes)
+                    {
+                        <option value="@bike.Id">@bike.BikeName</option>
+                    }
+                </select>
             </div>
-        </form>
+        </div>
     </div>
 </div>
-@if (!string.IsNullOrEmpty(Model.BikeName))
-{
-    <h2>Danh Sách Yêu Cầu Phê Duyệt Của @Model.BikeName</h2>
-}
-<table class="table table-striped">
+
+<h2 id="bookingListTitle" style="display: none;"></h2>
+
+<div id="bookingTableContainer">
+    <table class="table table-striped">
     <thead>
         <tr>
             <th>Bike Name</th>
@@ -55,8 +47,8 @@
                     <td>
                         @if (item.Status.Name == "Pending")
                         {
-                            <a class="btn btn-success" asp-action="Approve" asp-route-id="@item.Booking.Id">Approve</a>
-                            <a class="btn btn-danger" asp-action="Reject" asp-route-id="@item.Booking.Id">Reject</a>
+                            <button class="btn btn-success btn-approve" data-id="@item.Booking.Id">Approve</button>
+                            <button class="btn btn-danger btn-reject" data-id="@item.Booking.Id">Reject</button>
                         }
                         else
                         {
@@ -74,3 +66,121 @@
         }
     </tbody>
 </table>
+</div>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const bikeSelect = document.getElementById('bikeSelect');
+            const bookingListTitle = document.getElementById('bookingListTitle');
+            const bookingTableContainer = document.getElementById('bookingTableContainer');
+
+            bikeSelect.addEventListener('change', async function () {
+                const bikeId = this.value;
+                try {
+                    const url = bikeId ? `/Booking/GetPendingBookings?bikeId=${bikeId}` : '/Booking/GetPendingBookings';
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const data = await response.json();
+
+                    if (data.bikeName) {
+                        bookingListTitle.textContent = `Danh Sách Yêu Cầu Phê Duyệt Của ${data.bikeName}`;
+                    } else {
+                        bookingListTitle.textContent = 'Danh Sách Yêu Cầu Phê Duyệt';
+                    }
+                    bookingListTitle.style.display = 'block';
+
+                    bookingTableContainer.innerHTML = generateBookingTable(data.pendingBookings);
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Đã xảy ra lỗi khi tải dữ liệu.');
+                }
+            });
+
+            function generateBookingTable(bookings) {
+                if (bookings.length === 0) {
+                    return '<p class="text-center">Không có yêu cầu phê duyệt nào.</p>';
+                }
+
+                let tableHtml = `
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Bike Name</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                bookings.forEach(item => {
+                    tableHtml += `
+                        <tr>
+                            <td>${item.bike.bikeName}</td>
+                            <td>${item.customer.fullName}</td>
+                            <td>
+                                <span class="badge ${getBadgeClass(item.status.id)}">
+                                    ${item.status.name}
+                                </span>
+                            </td>
+                            <td>
+                                ${getActionButtons(item)}
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tableHtml += `
+                        </tbody>
+                    </table>
+                `;
+
+                return tableHtml;
+            }
+
+            function getBadgeClass(statusId) {
+                switch (statusId) {
+                    case 1: return 'badge-pending';
+                    case 2: return 'badge-approved';
+                    case 3: return 'badge-rejected';
+                    default: return 'badge-secondary';
+                }
+            }
+
+            function getActionButtons(item) {
+                if (item.status.name === 'Pending') {
+                    return `
+                        <button class="btn btn-success btn-approve" data-id="${item.booking.id}">Approve</button>
+                        <button class="btn btn-danger btn-reject" data-id="${item.booking.id}">Reject</button>
+                    `;
+                } else {
+                    return '<span class="text-muted">Request processed</span>';
+                }
+            }
+
+            // Event delegation for approve and reject buttons
+            bookingTableContainer.addEventListener('click', async function(e) {
+                if (e.target.classList.contains('btn-approve') || e.target.classList.contains('btn-reject')) {
+                    const bookingId = e.target.getAttribute('data-id');
+                    const action = e.target.classList.contains('btn-approve') ? 'Approve' : 'Reject';
+                    
+                    try {
+                        const response = await fetch(`/Booking/${action}?id=${bookingId}`, { method: 'POST' });
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        // Refresh the booking list after approval/rejection
+                        bikeSelect.dispatchEvent(new Event('change'));
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert(`Đã xảy ra lỗi khi ${action === 'Approve' ? 'phê duyệt' : 'từ chối'} yêu cầu.`);
+                    }
+                }
+            });
+        });
+    </script>
+}

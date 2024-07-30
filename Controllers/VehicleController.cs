@@ -3,6 +3,7 @@ using BikeSharingApp.Models;
 using System.Linq;
 using BikeSharingApp.Data;
 using BikeSharingApp.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace BikeSharingApp.Controllers
 {
@@ -24,6 +25,7 @@ namespace BikeSharingApp.Controllers
             {
                 viewModel.Bikes = _context.Bikes
                     .Where(b => b.LocationId == location.Value)
+                    .OrderByDescending(b => b.Id)
                     .ToList();
                 var locationEntity = _context.Locations
                 .FirstOrDefault(l => l.Id == location.Value);
@@ -32,7 +34,7 @@ namespace BikeSharingApp.Controllers
             }
             else
             {
-                viewModel.Bikes = _context.Bikes.ToList();
+                viewModel.Bikes = _context.Bikes.OrderByDescending(b => b.Id).ToList();
             }
 
             viewModel.Locations = _context.Locations.ToList();
@@ -67,13 +69,32 @@ namespace BikeSharingApp.Controllers
             var bike = await _context.Bikes.FindAsync(id);
             if (bike == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Không tìm thấy xe đạp" });
             }
+            try
+            {
+                // Xóa các bản ghi liên quan (nếu có)
+                var relatedBookings = _context.Bookings.Where(b => b.BikeId == id);
+                _context.Bookings.RemoveRange(relatedBookings);
 
-            _context.Bikes.Remove(bike);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Management_Post", "Account");
+                _context.Bikes.Remove(bike);
+                await _context.SaveChangesAsync();
+                return Json(new { success = true });
+            }
+            catch (DbUpdateException ex)
+            {
+                var innerException = ex.InnerException;
+                while (innerException != null)
+                {
+                    Console.WriteLine(innerException.Message);
+                    innerException = innerException.InnerException;
+                }
+                return Json(new { success = false, message = "Có lỗi xảy ra khi xóa xe đạp. Chi tiết: " + ex.InnerException?.Message });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra khi xóa xe đạp: " + ex.Message });
+            }
         }
         [HttpGet]
         public IActionResult Book(int? id)

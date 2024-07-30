@@ -16,7 +16,7 @@ namespace BikeSharingApp.Controllers
         }
 
         // GET: /Booking/Pending
-        public IActionResult Pending(int? bikeId)
+        public async Task<IActionResult> Pending(int? bikeId)
         {
             var userId = HttpContext.Session.Get<User>("User")?.Id;
             if (userId == null)
@@ -24,52 +24,90 @@ namespace BikeSharingApp.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // Lấy danh sách các xe do người dùng tạo
-            var createdBikes = _context.Bikes.Where(b => b.OwnerId == userId).OrderByDescending(b => b.Id).ToList();
-            var locations = _context.Locations.ToList();
-            var viewModel = new PendingBookingsViewModel();
+            // Lấy danh sách các xe do người dùng tạo và danh sách địa điểm chỉ một lần
+            var createdBikes = await _context.Bikes
+                .Where(b => b.OwnerId == userId)
+                .OrderByDescending(b => b.Id)
+                .ToListAsync();
+            // Lấy danh sách các yêu cầu phê duyệt dựa trên bikeId (nếu có)
+            var bookingsQuery = _context.Bookings
+                .Include(b => b.Bike)
+                .Include(b => b.Customer)
+                .Include(b => b.Status)
+                .Where(b => b.Bike.OwnerId == userId);
 
-            // Nếu có bikeId, thêm điều kiện lọc theo bikeId
             if (bikeId.HasValue)
             {
-                viewModel.PendingBookings = _context.Bookings
-                    .Include(b => b.Bike)
-                    .Include(b => b.Customer)
-                    .Include(b => b.Status)
-                    .Where(b => b.Bike.OwnerId == userId && b.Bike.Id == bikeId.Value)
-                    .Select(b => new PendingBookingModel
-                    {
-                        Booking = b,
-                        Bike = b.Bike,
-                        Customer = b.Customer,
-                        Status = b.Status
-                    })
-                    .ToList();
-                var bikeEntity = _context.Bikes
-                .FirstOrDefault(l => l.Id == bikeId.Value);
-                viewModel.BikeName = bikeEntity?.BikeName;
-            }
-            else
-            {
-                viewModel.PendingBookings = _context.Bookings
-                    .Include(b => b.Bike)
-                    .Include(b => b.Customer)
-                    .Include(b => b.Status)
-                    .Where(b => b.Bike.OwnerId == userId)
-                    .Select(b => new PendingBookingModel
-                    {
-                        Booking = b,
-                        Bike = b.Bike,
-                        Customer = b.Customer,
-                        Status = b.Status
-                    })
-                    .ToList();
+                bookingsQuery = bookingsQuery.Where(b => b.Bike.Id == bikeId.Value);
             }
 
-            viewModel.CreatedBikes = createdBikes;
+            var pendingBookings = await bookingsQuery
+                .Select(b => new PendingBookingModel
+                {
+                    Booking = b,
+                    Bike = b.Bike,
+                    Customer = b.Customer,
+                    Status = b.Status
+                })
+                .ToListAsync();
+
+            var bikeName = bikeId.HasValue
+                ? await _context.Bikes
+                    .Where(b => b.Id == bikeId.Value)
+                    .Select(b => b.BikeName)
+                    .SingleOrDefaultAsync()
+                : null;
+
+            var viewModel = new PendingBookingsViewModel
+            {
+                CreatedBikes = createdBikes,
+                PendingBookings = pendingBookings,
+                BikeName = bikeName
+            };
 
             return View(viewModel);
         }
+        public async Task<IActionResult> GetPendingBookings(int? bikeId)
+        {
+            var userId = HttpContext.Session.Get<User>("User")?.Id;
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var query = _context.Bookings
+                .Include(b => b.Bike)
+                .Include(b => b.Customer)
+                .Include(b => b.Status)
+                .Where(b => b.Bike.OwnerId == userId)
+                .AsQueryable();
+
+            if (bikeId.HasValue)
+            {
+                query = query.Where(b => b.Bike.Id == bikeId.Value);
+            }
+
+            var pendingBookings = await query.ToListAsync();
+
+            var bikeName = bikeId.HasValue
+                ? await _context.Bikes.Where(b => b.Id == bikeId).Select(b => b.BikeName).FirstOrDefaultAsync()
+                : null;
+
+            var result = new
+            {
+                pendingBookings = pendingBookings.Select(b => new
+                {
+                    booking = new { id = b.Id },
+                    bike = new { bikeName = b.Bike.BikeName },
+                    customer = new { fullName = b.Customer.FullName },
+                    status = new { id = b.Status.Id, name = b.Status.Name }
+                }),
+                bikeName
+            };
+
+            return Json(result);
+        }
+
         public IActionResult Approve(int id)
         {
             var booking = _context.Bookings.Include(b => b.Bike).FirstOrDefault(b => b.Id == id);

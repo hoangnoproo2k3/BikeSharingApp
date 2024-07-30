@@ -42,7 +42,7 @@
     <div class="col-12">
         <h2 class="mb-4">Phương tiện của bạn</h2>
         <div class="table-responsive">
-            <table class="table ">
+            <table class="table">
                 <thead>
                     <tr>
                         <th>Hình ảnh</th>
@@ -58,7 +58,7 @@
                 <tbody>
                     @foreach (var bike in Model.CreatedBikes)
                     {
-                        <tr>
+                        <tr id="bike-@bike.Id">
                             <td class="thumbnail-container">
                                 <img src="@(!string.IsNullOrEmpty(bike.Img) ? bike.Img : defaultImage)"
                                     alt="@bike.BikeName">
@@ -70,12 +70,8 @@
                             <td>@bike.Description</td>
                             <td class="action-icons">
                                 <a asp-controller="Bikes" asp-action="Edit" asp-route-id="@bike.Id" title="Sửa">&#9998;</a>
-                                <form asp-controller="Vehicle" asp-action="Delete" method="post" class="d-inline"
-                                    onsubmit="return confirmDelete();">
-                                    <input type="hidden" name="id" value="@bike.Id" />
-                                    <button type="submit" title="Xóa"
-                                        style="border:none; background:none; padding:0; margin:0; color:red; cursor:pointer;">&#10060;</button>
-                                </form>
+                                <button type="button" class="btn-delete" data-id="@bike.Id" title="Xóa"
+                                    style="border:none; background:none; padding:0; margin:0; color:red; cursor:pointer;">&#10060;</button>
                             </td>
                             <td>
                                 <a class="btn btn-outline-primary" asp-controller="Booking" asp-action="Pending"
@@ -90,8 +86,39 @@
 </div>
 @section Scripts {
     <script>
-        function confirmDelete() {
-            return confirm("Bạn có chắc chắn muốn xóa mục này?");
-        }
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.btn-delete');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', async function () {
+                    const bikeId = this.getAttribute('data-id');
+                    if (confirm("Bạn có chắc chắn muốn xóa mục này?")) {
+                        try {
+                            const response = await fetch(`/Vehicle/Delete?id=${bikeId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                }
+                            });
+
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+
+                            const data = await response.json();
+
+                            if (data.success) {
+                                document.getElementById(`bike-${bikeId}`).remove();
+                                alert('Xe đạp đã được xóa thành công.');
+                            } else {
+                                alert(data.message || 'Có lỗi xảy ra khi xóa xe đạp.');
+                            }
+                        } catch (error) {
+                            console.error('Error:', error);
+                            alert('Đã xảy ra lỗi khi xóa xe đạp.');
+                        }
+                    }
+                });
+            });
+        });
     </script>
 }
